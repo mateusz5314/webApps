@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body onload="requestData()">
+    <form>
+      <label for="name">Name:</label><br>
+      <input type="text" id="name" name="name" value=""><br>
+      <label for="surname">Surname:</label><br>
+      <input type="text" id="surname" name="surname" value=""><br><br>
+      <input type="button" value="Add user" onclick="addPerson()"><br><br>
+      <label for="removeId">ID:</label><br>
+      <input type="number" id="removeId" name="removeId" value="">
+      <input type="button" value="Delete" onclick="clearTable()">
+    </form>
+    <br><br>
+    <p>RESPONSE:</p>
+    <div id="responseBox"></div>
+    {% load static %}
+    <script type="text/javascript" src="{% static 'js/app.js' %}"></script>
+</body>
+</html>

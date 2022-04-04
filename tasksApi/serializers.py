@@ -1,12 +1,12 @@
 from rest_framework import serializers
 
-from .models import Person, Task
+from .models import Task, User
 
 
-class PersonSerializer(serializers.HyperlinkedModelSerializer):
+class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Person
-        fields = ('id', 'name', 'surname')
+        model = User
+        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'date_joined')
 
 
 class TaskSerializer(serializers.HyperlinkedModelSerializer):

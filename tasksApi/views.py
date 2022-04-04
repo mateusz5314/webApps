@@ -1,13 +1,47 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from rest_framework import viewsets
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from django.contrib.auth import authenticate, login
+import json
 
-from .serializers import PersonSerializer, TaskSerializer
-from .models import Person, Task
+
+from .serializers import TaskSerializer, UserSerializer
+from .models import Task, User
 
 
-class PersonViewSet(viewsets.ModelViewSet):
-    queryset = Person.objects.all().order_by('id')
-    serializer_class = PersonSerializer
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all().order_by('id')
+    serializer_class = UserSerializer
+
+    @action(detail=False, methods=['POST'])
+    def login(self, request, *args, **kwargs):
+        print("login")
+        data = json.loads(request.body)
+        print(data)
+        uname = data["login"]
+        passwd = data["passwd"]
+        user = authenticate(username=uname, password=passwd)
+        if user is not None:
+            response = Response(data="Authenticated")
+            print(user)
+            logged = login(request=request, user=user)
+            print(logged)
+        else:
+            response = Response(data="Authentication failed")
+
+        return response
+
+    @action(detail=False, methods=['GET'])
+    def loginStatus(self, request, *args, **kwargs):
+        authStatus = request.user.is_authenticated
+        if authStatus:
+            response = f"Active account: {request.user}"
+        else:
+            response = f"Active account: None"
+
+        return Response(data=response)
 
 
 class TaskViewSet(viewsets.ModelViewSet):

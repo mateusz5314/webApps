@@ -71,3 +71,11 @@ async function checkLoginStatus() {
     document.getElementById("accountStatus").innerHTML = ''
     document.getElementById("accountStatus").appendChild(document.createElement('pre')).innerHTML = str;
 }
+
+async function refresh() {
+    const response = await fetch("/root/table/", {method: 'GET'});
+    const data = await response.json();
+    const str = JSON.stringify(data, undefined, 4)
+    document.getElementById("accountTables").innerHTML = ''
+    document.getElementById("accountTables").appendChild(document.createElement('pre')).innerHTML = str;
+}

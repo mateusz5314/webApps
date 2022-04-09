@@ -7,8 +7,8 @@ from django.contrib.auth import authenticate, login
 import json
 
 
-from .serializers import TaskSerializer, UserSerializer
-from .models import Task, User
+from .serializers import TableSerializer, UserSerializer
+from .models import Table, User
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -44,9 +44,9 @@ class UserViewSet(viewsets.ModelViewSet):
         return Response(data=response)
 
 
-class TaskViewSet(viewsets.ModelViewSet):
-    queryset = Task.objects.all().order_by('id')
-    serializer_class = TaskSerializer
+class TableViewSet(viewsets.ModelViewSet):
+    queryset = Table.objects.all().order_by('id')
+    serializer_class = TableSerializer
 
 
 def home(request):

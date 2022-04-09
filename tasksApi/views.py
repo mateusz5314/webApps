@@ -1,11 +1,11 @@
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from django.shortcuts import render
 from rest_framework import viewsets
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view
 from rest_framework.response import Response
 from django.contrib.auth import authenticate, login
 import json
-
 
 from .serializers import TableSerializer, UserSerializer
 from .models import Table, User
@@ -47,6 +47,9 @@ class UserViewSet(viewsets.ModelViewSet):
 class TableViewSet(viewsets.ModelViewSet):
     queryset = Table.objects.all().order_by('id')
     serializer_class = TableSerializer
+
+    def get_queryset(self):
+        return Table.objects.filter(Q(owner=self.request.user) | Q(access=self.request.user)).distinct()
 
 
 def home(request):

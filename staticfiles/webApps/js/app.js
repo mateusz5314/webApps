@@ -1,3 +1,25 @@
+function getCookie(name) {
+    let cookieValue = null;
+
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+
+                break;
+            }
+        }
+    }
+
+    return cookieValue;
+}
+
+const csrftoken = getCookie('csrftoken');
+
 async function requestData() {
     const response = await fetch("/root/user/", {method: 'GET'});
     const data = await response.json();
@@ -34,7 +56,7 @@ async function remove(url = '') {
     return await fetch(url, {
         method: 'DELETE',
         headers: {
-            'X-CSRFToken': 'BhOmkEsNGMdPEGfjaHGQ46gy626OFJx5tBkNatwR11c4OxLnvlQzPqdScO4g8NmA',
+            'X-CSRFToken': csrftoken,
             'Content-Type': 'application/json'
         },
     });
@@ -44,7 +66,7 @@ async function postData(url = '', data = {}) {
     const response = await fetch(url, {
         method: 'POST', // *GET, POST, PUT, DELETE, etc.
         headers: {
-            'X-CSRFToken': 'BhOmkEsNGMdPEGfjaHGQ46gy626OFJx5tBkNatwR11c4OxLnvlQzPqdScO4g8NmA',
+            'X-CSRFToken': csrftoken,
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(data) // body data type must match "Content-Type" header
@@ -61,6 +83,12 @@ async function signIn() {
         "login": userName,
         "passwd": passwd,
     });
+    console.log(response);
+}
+
+async function signOut() {
+    console.log("sign in")
+    const response = await postData("/root/user/logout/", "");
     console.log(response);
 }
 

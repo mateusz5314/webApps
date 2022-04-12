@@ -2,9 +2,9 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import render
 from rest_framework import viewsets
-from rest_framework.decorators import action, api_view
+from rest_framework.decorators import action
 from rest_framework.response import Response
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 import json
 
 from .serializers import TableSerializer, UserSerializer
@@ -17,20 +17,22 @@ class UserViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['POST'])
     def login(self, request, *args, **kwargs):
-        print("login")
         data = json.loads(request.body)
-        print(data)
         uname = data["login"]
         passwd = data["passwd"]
         user = authenticate(username=uname, password=passwd)
         if user is not None:
             response = Response(data="Authenticated")
-            print(user)
             logged = login(request=request, user=user)
-            print(logged)
         else:
             response = Response(data="Authentication failed")
 
+        return response
+
+    @action(detail=False, methods=['POST'])
+    def logout(self, request, *args, **kwargs):
+        logout(request)
+        response = Response(data="Logged out")
         return response
 
     @action(detail=False, methods=['GET'])

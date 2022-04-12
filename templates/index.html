@@ -27,20 +27,28 @@
     </div>
     <div style="position: relative;float: left;margin-left: 50px;">
         <p>Sign in:</p>
-        <form>
+        <form action="" method="post">
+            {% csrf_token %}
           <label for="sin_login">Login:</label><br>
           <input type="text" id="sin_login" name="sin_login" value=""><br>
           <label for="sin_passwd">Password:</label><br>
           <input type="text" id="sin_passwd" name="sin_passwd" value=""><br><br>
           <input type="button" value="Sign in" onclick="signIn()">
+          <input type="button" value="Sign out" onclick="signOut()">
         </form>
         <br>
-        <input type="button" value="Check login status" onclick="checkLoginStatus()">
+        <form action="" method="post">
+            {% csrf_token %}
+            <input type="button" value="Check login status" onclick="checkLoginStatus()">
+        </form>
         <div id="accountStatus"></div>
     </div>
     <div style="position: relative;float: left;margin-left: 50px;">
         <p>Your tables:</p>
-        <input type="button" value="Refresh" onclick="refresh()">
+        <form action="" method="post">
+            {% csrf_token %}
+            <input type="button" value="Refresh" onclick="refresh()">
+        </form>
         <div id="accountTables"></div>
     </div>
     <script type="text/javascript" src="{% static 'webApps/js/app.js' %}"></script>

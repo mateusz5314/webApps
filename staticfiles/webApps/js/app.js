@@ -23,8 +23,8 @@ const csrftoken = getCookie('csrftoken');
 async function requestData() {
     const response = await fetch("/root/user/", {method: 'GET'});
     const data = await response.json();
-    const str = JSON.stringify(data, undefined, 4)
-    document.getElementById("responseBox").innerHTML = ''
+    const str = JSON.stringify(data, undefined, 4);
+    document.getElementById("responseBox").innerHTML = '';
     document.getElementById("responseBox").appendChild(document.createElement('pre')).innerHTML = str;
 }
 
@@ -40,7 +40,7 @@ async function addPerson() {
     //         "surname": surname
     //     }
     // );
-    console.log("Disabled")
+    console.log("Disabled");
     await requestData();
 }
 
@@ -49,7 +49,7 @@ async function removeUser() {
     // const id = document.getElementById("removeId").value
     // await remove("/root/user/" + id);
     // await requestData();
-    console.log("Disabled")
+    console.log("Disabled");
 }
 
 async function remove(url = '') {
@@ -77,8 +77,8 @@ async function postData(url = '', data = {}) {
 
 async function signIn() {
     console.log("sign in")
-    const userName = document.getElementById("sin_login").value
-    const passwd = document.getElementById("sin_passwd").value
+    const userName = document.getElementById("sin_login").value;
+    const passwd = document.getElementById("sin_passwd").value;
     const response = await postData("/root/user/login/", {
         "login": userName,
         "passwd": passwd,
@@ -87,7 +87,7 @@ async function signIn() {
 }
 
 async function signOut() {
-    console.log("sign in")
+    console.log("sign in");
     const response = await postData("/root/user/logout/", "");
     console.log(response);
 }
@@ -95,15 +95,19 @@ async function signOut() {
 async function checkLoginStatus() {
     const response = await fetch("/root/user/loginStatus", {method: 'GET'});
     const data = await response.json();
-    const str = JSON.stringify(data, undefined, 4)
-    document.getElementById("accountStatus").innerHTML = ''
+    const str = JSON.stringify(data, undefined, 4);
+    document.getElementById("accountStatus").innerHTML = '';
     document.getElementById("accountStatus").appendChild(document.createElement('pre')).innerHTML = str;
 }
 
 async function refresh() {
     const response = await fetch("/root/table/", {method: 'GET'});
     const data = await response.json();
-    const str = JSON.stringify(data, undefined, 4)
-    document.getElementById("accountTables").innerHTML = ''
+    const str = JSON.stringify(data, undefined, 4);
+    document.getElementById("accountTables").innerHTML = '';
     document.getElementById("accountTables").appendChild(document.createElement('pre')).innerHTML = str;
+}
+
+async function addTable() {
+    console.log("add table");
 }

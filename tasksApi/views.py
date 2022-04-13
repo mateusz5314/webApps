@@ -53,6 +53,9 @@ class TableViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return Table.objects.filter(Q(owner=self.request.user) | Q(access=self.request.user)).distinct()
 
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
 
 def home(request):
     return render(request, "index.html")

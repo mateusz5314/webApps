@@ -22,7 +22,7 @@
           <input type="button" value="Delete" onclick="clearTable()">
         </form>
         <br><br>
-        <p>RESPONSE:</p>
+        <p>Users:</p>
         <div id="responseBox"></div>
     </div>
     <div style="position: relative;float: left;margin-left: 50px;">
@@ -44,6 +44,17 @@
         <div id="accountStatus"></div>
     </div>
     <div style="position: relative;float: left;margin-left: 50px;">
+        <p>Add table:</p>
+        <form action="" method="post">
+            {% csrf_token %}
+              <label for="table_name">Name:</label><br>
+              <input type="text" id="table_name" name="table_name" value=""><br><br>
+              <label for="table_description">Description:</label><br>
+              <input type="text" id="table_description" name="table_description" value=""><br><br>
+              <label for="table_access">Shared with(UID):</label><br>
+              <input type="text" id="table_access" name="table_access" value=""><br><br>
+            <input type="button" value="Add table" onclick="addTable()">
+        </form>
         <p>Your tables:</p>
         <form action="" method="post">
             {% csrf_token %}

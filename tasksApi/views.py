@@ -7,8 +7,8 @@ from rest_framework.response import Response
 from django.contrib.auth import authenticate, login, logout
 import json
 
-from .serializers import TableSerializer, UserSerializer
-from .models import Table, User
+from .serializers import TableSerializer, UserSerializer, TaskSerializer
+from .models import Table, User, Task
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -55,6 +55,22 @@ class TableViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
+
+
+class TaskViewSet(viewsets.ModelViewSet):
+    queryset = Task.objects.all().order_by('id')
+    serializer_class = TaskSerializer
+
+    @action(detail=True, methods=['GET'])
+    def getTasks(self, request, *args, **kwargs):
+        tableId = kwargs["pk"]
+        tableDetails = Table.objects.get(id=tableId)
+        print(tableDetails.access.all())
+        if request.user == tableDetails.owner or request.user in tableDetails.access.all():
+            qs = Task.objects.filter(Q(table=tableId))
+        else:
+            qs = []
+        return Response(data=[dict(name=record.name) for record in qs])
 
 
 def home(request):

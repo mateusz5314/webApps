@@ -58,7 +58,10 @@
         <p>Your tables:</p>
         <form action="" method="post">
             {% csrf_token %}
-            <input type="button" value="Refresh" onclick="refresh()">
+            <input type="button" value="Show my tables" onclick="refresh()"><br>
+            <label for="tableId">Table ID:</label><br>
+            <input type="number" id="tableId" name="tableId" value="">
+            <input type="button" value="Open table" onclick="getTasks()">
         </form>
         <div id="accountTables"></div>
     </div>

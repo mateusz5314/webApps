@@ -123,3 +123,13 @@ async function addTable() {
     });
     console.log(response);
 }
+
+async function getTasks() {
+    const id = document.getElementById("tableId").value
+    const url = "/root/task/" + id + "/getTasks/"
+    const response = await fetch(url, {method: 'GET'});
+    const tasks = await response.json();
+    const str = JSON.stringify(tasks, undefined, 4);
+    document.getElementById("accountTables").innerHTML = '';
+    document.getElementById("accountTables").appendChild(document.createElement('pre')).innerHTML = str;
+}

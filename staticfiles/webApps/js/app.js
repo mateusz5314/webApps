@@ -109,5 +109,27 @@ async function refresh() {
 }
 
 async function addTable() {
-    console.log("add table");
+    const name = document.getElementById("table_name").value;
+    const desc = document.getElementById("table_description").value;
+    let access = [document.getElementById("table_access").value, ];
+    const userUrl = "/root/user/";
+    access.forEach(function(part, index) {
+      this[index] = window.location.href.slice(0, -1) + userUrl + this[index] + '/';
+    }, access);
+    const response = await postData("/root/table/", {
+        "name": name,
+        "description": desc,
+        "access": access,
+    });
+    console.log(response);
+}
+
+async function getTasks() {
+    const id = document.getElementById("tableId").value
+    const url = "/root/task/" + id + "/getTasks/"
+    const response = await fetch(url, {method: 'GET'});
+    const tasks = await response.json();
+    const str = JSON.stringify(tasks, undefined, 4);
+    document.getElementById("accountTables").innerHTML = '';
+    document.getElementById("accountTables").appendChild(document.createElement('pre')).innerHTML = str;
 }

@@ -29,27 +29,26 @@ async function requestData() {
 }
 
 async function addPerson() {
-    // const login = document.getElementById("reg_login").value
-    // const passwd = document.getElementById("reg_passwd").value
-    // const name = document.getElementById("name").value
-    // const surname = document.getElementById("surname").value
-    // await postData("/root/user/", {
-    //         "login": login,
-    //         "passwd": passwd,
-    //         "name": name,
-    //         "surname": surname
-    //     }
-    // );
-    console.log("Disabled");
+    const login = document.getElementById("reg_login").value
+    const passwd = document.getElementById("reg_passwd").value
+    const name = document.getElementById("reg_name").value
+    const surname = document.getElementById("reg_surname").value
+    const email = document.getElementById("reg_email").value
+    await postData("/root/user/createAccount/", {
+          "username": login,
+          "password": passwd,
+          "first_name": name,
+          "last_name": surname,
+          "email": email
+        }
+    );
     await requestData();
 }
 
 async function removeUser() {
-    // console.log("clearing")
-    // const id = document.getElementById("removeId").value
-    // await remove("/root/user/" + id);
-    // await requestData();
-    console.log("Disabled");
+    const id = document.getElementById("removeId").value
+    await remove("/root/user/" + id + "/");
+    await requestData();
 }
 
 async function remove(url = '') {

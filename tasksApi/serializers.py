@@ -6,7 +6,13 @@ from .models import Table, User, Task
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'date_joined')
+        fields = ('id', 'username', 'password', 'first_name', 'last_name', 'email')
+
+
+class UserSerializerShort(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'email')
 
 
 class TableSerializer(serializers.HyperlinkedModelSerializer):

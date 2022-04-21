@@ -11,15 +11,17 @@
           <label for="reg_login">Login:</label><br>
           <input type="text" id="reg_login" name="reg_login" value=""><br>
           <label for="reg_passwd">Password:</label><br>
-          <input type="text" id="reg_passwd" name="reg_passwd" value=""><br>
-          <label for="name">Name:</label><br>
-          <input type="text" id="name" name="name" value=""><br>
-          <label for="surname">Surname:</label><br>
-          <input type="text" id="surname" name="surname" value=""><br><br>
+          <input type="password" id="reg_passwd" name="reg_passwd" value=""><br>
+          <label for="reg_name">Name:</label><br>
+          <input type="text" id="reg_name" name="reg_name" value=""><br>
+          <label for="reg_surname">Surname:</label><br>
+          <input type="text" id="reg_surname" name="reg_surname" value=""><br>
+          <label for="reg_email">Email:</label><br>
+          <input type="email" id="reg_email" name="reg_email" value=""><br><br>
           <input type="button" value="Add user" onclick="addPerson()"><br><br>
           <label for="removeId">ID:</label><br>
           <input type="number" id="removeId" name="removeId" value="">
-          <input type="button" value="Delete" onclick="clearTable()">
+          <input type="button" value="Delete" onclick="removeUser()">
         </form>
         <br><br>
         <p>Users:</p>
@@ -32,7 +34,7 @@
           <label for="sin_login">Login:</label><br>
           <input type="text" id="sin_login" name="sin_login" value=""><br>
           <label for="sin_passwd">Password:</label><br>
-          <input type="text" id="sin_passwd" name="sin_passwd" value=""><br><br>
+          <input type="password" id="sin_passwd" name="sin_passwd" value=""><br><br>
           <input type="button" value="Sign in" onclick="signIn()">
           <input type="button" value="Sign out" onclick="signOut()">
         </form>

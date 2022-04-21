@@ -1,19 +1,26 @@
+from datetime import datetime
+
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import render
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.contrib.auth import authenticate, login, logout
 import json
 
-from .serializers import TableSerializer, UserSerializer, TaskSerializer
+from .serializers import TableSerializer, UserSerializer, TaskSerializer, UserSerializerShort
 from .models import Table, User, Task
 
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().order_by('id')
-    serializer_class = UserSerializer
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return UserSerializer
+        else:
+            return UserSerializerShort
 
     @action(detail=False, methods=['POST'])
     def login(self, request, *args, **kwargs):
@@ -44,6 +51,17 @@ class UserViewSet(viewsets.ModelViewSet):
             response = f"Active account: None"
 
         return Response(data=response)
+
+    @action(detail=False, methods=['POST'])
+    def createAccount(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        user.set_password(request.data["password"])
+        now = datetime.now()
+        user.date_joined = now.strftime("%Y-%m-%d %H:%M:%S")
+        user.save()
+        return Response(data="success", status=status.HTTP_200_OK)
 
 
 class TableViewSet(viewsets.ModelViewSet):

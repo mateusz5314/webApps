@@ -79,8 +79,8 @@ async function signIn() {
     const userName = document.getElementById("sin_login").value;
     const passwd = document.getElementById("sin_passwd").value;
     const response = await postData("/root/user/login/", {
-        "login": userName,
-        "passwd": passwd,
+        "username": userName,
+        "password": passwd,
     });
     console.log(response);
 }

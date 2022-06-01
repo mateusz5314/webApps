@@ -29,10 +29,10 @@ class UserViewSet(viewsets.ModelViewSet):
         passwd = data["password"]
         user = authenticate(username=uname, password=passwd)
         if user is not None:
-            response = Response(data="Authenticated")
+            response = Response(data="Authenticated", status=status.HTTP_200_OK)
             logged = login(request=request, user=user)
         else:
-            response = Response(data="Authentication failed")
+            response = Response(data="Authentication failed", status=status.HTTP_200_OK)
 
         return response
 

@@ -1,5 +1,6 @@
 from datetime import datetime
 
+import django.db.models
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import render
@@ -70,7 +71,10 @@ class TableViewSet(viewsets.ModelViewSet):
     serializer_class = TableSerializer
 
     def get_queryset(self):
-        return Table.objects.filter(Q(owner=self.request.user) | Q(access=self.request.user)).distinct()
+        if self.request.user.is_authenticated:
+            return Table.objects.filter(Q(owner=self.request.user) | Q(access=self.request.user)).distinct()
+        else:
+            return Table.objects.filter(Q(owner=-1)).distinct()
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)

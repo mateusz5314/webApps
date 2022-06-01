@@ -25,8 +25,8 @@ class UserViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['POST'])
     def login(self, request, *args, **kwargs):
         data = json.loads(request.body)
-        uname = data["login"]
-        passwd = data["passwd"]
+        uname = data["username"]
+        passwd = data["password"]
         user = authenticate(username=uname, password=passwd)
         if user is not None:
             response = Response(data="Authenticated")

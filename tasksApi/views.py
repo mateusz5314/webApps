@@ -28,29 +28,29 @@ class UserViewSet(viewsets.ModelViewSet):
         uname = data["username"]
         passwd = data["password"]
         user = authenticate(username=uname, password=passwd)
+        responseData = {"error": "None", "status": "Authentication failed"}
         if user is not None:
-            response = Response(data="Authenticated", status=status.HTTP_200_OK)
+            responseData["status"] = "Authenticated"
             logged = login(request=request, user=user)
-        else:
-            response = Response(data="Authentication failed", status=status.HTTP_200_OK)
 
-        return response
+        return Response(data=json.dumps(responseData), status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['POST'])
     def logout(self, request, *args, **kwargs):
         logout(request)
-        response = Response(data="Logged out")
-        return response
+        responseData = {"error": "None", "status": "Logged out"}
+        return Response(data=json.dumps(responseData), status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['GET'])
     def loginStatus(self, request, *args, **kwargs):
         authStatus = request.user.is_authenticated
+        responseData = {"error": "None", "status": "Logged out"}
         if authStatus:
-            response = f"Active account: {request.user}"
+            responseData["status"] = f"Active account: {request.user}"
         else:
-            response = f"Active account: None"
+            responseData["status"] = f"Active account: None"
 
-        return Response(data=response)
+        return Response(data=json.dumps(responseData), status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['POST'])
     def createAccount(self, request, *args, **kwargs):
@@ -61,7 +61,8 @@ class UserViewSet(viewsets.ModelViewSet):
         now = datetime.now()
         user.date_joined = now.strftime("%Y-%m-%d %H:%M:%S")
         user.save()
-        return Response(data="success", status=status.HTTP_200_OK)
+        responseData = {"error": "None", "status": "success"}
+        return Response(data=json.dumps(responseData), status=status.HTTP_200_OK)
 
 
 class TableViewSet(viewsets.ModelViewSet):
@@ -88,7 +89,8 @@ class TaskViewSet(viewsets.ModelViewSet):
             qs = Task.objects.filter(Q(table=tableId))
         else:
             qs = []
-        return Response(data=[dict(name=record.name) for record in qs])
+        responseData = {"error": "None", "tasks": [dict(name=record.name) for record in qs]}
+        return Response(data=json.dumps(responseData), status=status.HTTP_200_OK)
 
 
 def home(request):

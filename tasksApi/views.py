@@ -10,8 +10,8 @@ from rest_framework.response import Response
 from django.contrib.auth import authenticate, login, logout
 import json
 
-from .serializers import TableSerializer, UserSerializer, TaskSerializer, UserSerializerShort
-from .models import Table, User, Task
+from .serializers import TableSerializer, UserSerializer, TaskSerializer, UserSerializerShort, ListSerializer
+from .models import Table, User, Task, List
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -80,20 +80,32 @@ class TableViewSet(viewsets.ModelViewSet):
         serializer.save(owner=self.request.user)
 
 
+class ListViewSet(viewsets.ModelViewSet):
+    queryset = List.objects.all().order_by('id')
+    serializer_class = ListSerializer
+
+    @action(detail=True, methods=['GET'])
+    def getLists(self, request, *args, **kwargs):
+        tableId = kwargs["pk"]
+        tableDetails = Table.objects.get(id=tableId)
+        print(tableDetails.access.all())
+        if request.user == tableDetails.owner or request.user in tableDetails.access.all():
+            qs = List.objects.filter(Q(table=tableId))
+        else:
+            qs = []
+        responseData = {"error": "None", "lists": [dict(name=record.name) for record in qs]}
+        return Response(data=json.dumps(responseData), status=status.HTTP_200_OK)
+
+
 class TaskViewSet(viewsets.ModelViewSet):
     queryset = Task.objects.all().order_by('id')
     serializer_class = TaskSerializer
 
     @action(detail=True, methods=['GET'])
     def getTasks(self, request, *args, **kwargs):
-        tableId = kwargs["pk"]
-        tableDetails = Table.objects.get(id=tableId)
-        print(tableDetails.access.all())
-        if request.user == tableDetails.owner or request.user in tableDetails.access.all():
-            qs = Task.objects.filter(Q(table=tableId))
-        else:
-            qs = []
-        responseData = {"error": "None", "tasks": [dict(name=record.name) for record in qs]}
+        listId = kwargs["pk"]
+        qs = Task.objects.filter(Q(list=listId))
+        responseData = {"error": "None", "tasks": [dict(id=record.id, name=record.name) for record in qs]}
         return Response(data=json.dumps(responseData), status=status.HTTP_200_OK)
 
 

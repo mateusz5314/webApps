@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Table, User, Task
+from .models import Table, User, Task, List
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -21,7 +21,13 @@ class TableSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('id', 'owner', 'name', 'description', 'access')
 
 
+class ListSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = List
+        fields = ('id', 'name', 'description', 'table')
+
+
 class TaskSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Task
-        fields = ('id', 'assignee', 'name', 'description', 'table', 'status')
+        fields = ('id', 'assignee', 'name', 'description', 'list', 'status')

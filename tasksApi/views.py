@@ -26,15 +26,19 @@ class UserViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['POST'])
     def login(self, request, *args, **kwargs):
         data = json.loads(request.body)
-        uname = data["username"]
-        passwd = data["password"]
-        user = authenticate(username=uname, password=passwd)
-        responseData = {"error": "None", "status": "Authentication failed"}
-        if user is not None:
-            responseData["status"] = "Authenticated"
-            logged = login(request=request, user=user)
-
-        return Response(data=json.dumps(responseData), status=status.HTTP_200_OK)
+        try:
+            uname = data["username"]
+            passwd = data["password"]
+            user = authenticate(username=uname, password=passwd)
+            responseData = {"error": "None", "status": "Authentication failed"}
+            if user is not None:
+                responseData["status"] = "Authenticated"
+                logged = login(request=request, user=user)
+            return Response(data=json.dumps(responseData), status=status.HTTP_200_OK)
+        except KeyError:
+            responseData = {"error": "Incorrect key. Expected keys: username, password", "status": "Authentication "
+                                                                                                   "failed"}
+            return Response(data=json.dumps(responseData), status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=False, methods=['POST'])
     def logout(self, request, *args, **kwargs):

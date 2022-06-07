@@ -62,7 +62,8 @@ CORS_ALLOW_HEADERS = list(default_headers) + [
     'access-control_allow_origin',
     'content-type',
     'cross-origin-opener-policy',
-    'orgin'
+    'orgin',
+    'Access-Control-Allow-Origin'
 ]
 
 SECURE_REFERRER_POLICY = 'unsafe-url'

@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 import os
 from pathlib import Path
+from corsheaders.defaults import default_headers
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -52,8 +53,18 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    'access-control-allow-credentials',
+    'access-control-allow-methods',
+    'access-control_allow_origin',
+    'content-type',
+    'cross-origin-opener-policy',
+    'orgin'
+]
+
 SECURE_REFERRER_POLICY = 'unsafe-url'
 
 SESSION_COOKIE_SAMESITE = 'None'

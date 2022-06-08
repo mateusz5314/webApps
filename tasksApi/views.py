@@ -34,17 +34,17 @@ class UserViewSet(viewsets.ModelViewSet):
             if user is not None:
                 responseData["status"] = "Authenticated"
                 logged = login(request=request, user=user)
-            return Response(data=json.dumps(responseData), status=status.HTTP_200_OK)
+            return Response(data=responseData, status=status.HTTP_200_OK)
         except KeyError:
             responseData = {"error": "Incorrect key. Expected keys: username, password", "status": "Authentication "
                                                                                                    "failed"}
-            return Response(data=json.dumps(responseData), status=status.HTTP_400_BAD_REQUEST)
+            return Response(data=responseData, status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=False, methods=['POST'])
     def logout(self, request, *args, **kwargs):
         logout(request)
         responseData = {"error": "None", "status": "Logged out"}
-        return Response(data=json.dumps(responseData), status=status.HTTP_200_OK)
+        return Response(data=responseData, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['GET'])
     def loginStatus(self, request, *args, **kwargs):
@@ -55,7 +55,7 @@ class UserViewSet(viewsets.ModelViewSet):
         else:
             responseData["status"] = f"Active account: None"
 
-        return Response(data=json.dumps(responseData), status=status.HTTP_200_OK)
+        return Response(data=responseData, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['POST'])
     def createAccount(self, request, *args, **kwargs):
@@ -67,7 +67,7 @@ class UserViewSet(viewsets.ModelViewSet):
         user.date_joined = now.strftime("%Y-%m-%d %H:%M:%S")
         user.save()
         responseData = {"error": "None", "status": "success"}
-        return Response(data=json.dumps(responseData), status=status.HTTP_200_OK)
+        return Response(data=responseData, status=status.HTTP_200_OK)
 
 
 class TableViewSet(viewsets.ModelViewSet):
@@ -98,7 +98,7 @@ class ListViewSet(viewsets.ModelViewSet):
         else:
             qs = []
         responseData = {"error": "None", "lists": [dict(name=record.name) for record in qs]}
-        return Response(data=json.dumps(responseData), status=status.HTTP_200_OK)
+        return Response(data=responseData, status=status.HTTP_200_OK)
 
 
 class TaskViewSet(viewsets.ModelViewSet):
@@ -110,7 +110,7 @@ class TaskViewSet(viewsets.ModelViewSet):
         listId = kwargs["pk"]
         qs = Task.objects.filter(Q(list=listId))
         responseData = {"error": "None", "tasks": [dict(id=record.id, name=record.name) for record in qs]}
-        return Response(data=json.dumps(responseData), status=status.HTTP_200_OK)
+        return Response(data=responseData, status=status.HTTP_200_OK)
 
 
 def home(request):

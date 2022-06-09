@@ -97,7 +97,7 @@ class ListViewSet(viewsets.ModelViewSet):
             qs = List.objects.filter(Q(table=tableId))
         else:
             qs = []
-        responseData = {"error": "None", "lists": [dict(name=record.name) for record in qs]}
+        responseData = {"error": "None", "lists": [dict(id=record.id, name=record.name) for record in qs]}
         return Response(data=responseData, status=status.HTTP_200_OK)
 
 

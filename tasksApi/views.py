@@ -91,13 +91,20 @@ class ListViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['GET'])
     def getLists(self, request, *args, **kwargs):
         tableId = kwargs["pk"]
-        tableDetails = Table.objects.get(id=tableId)
-        print(tableDetails.access.all())
-        if request.user == tableDetails.owner or request.user in tableDetails.access.all():
-            qs = List.objects.filter(Q(table=tableId))
+        error = "None"
+        try:
+            tableDetails = Table.objects.get(id=tableId)
+        except Table.DoesNotExist:
+            tableDetails = None
+            error = "Table does not exist"
+        if tableDetails:
+            if request.user == tableDetails.owner or request.user in tableDetails.access.all():
+                qs = List.objects.filter(Q(table=tableId))
+            else:
+                qs = []
         else:
             qs = []
-        responseData = {"error": "None", "lists": [dict(id=record.id, name=record.name) for record in qs]}
+        responseData = {"error": error, "lists": [dict(id=record.id, name=record.name) for record in qs]}
         return Response(data=responseData, status=status.HTTP_200_OK)
 
 
@@ -109,7 +116,15 @@ class TaskViewSet(viewsets.ModelViewSet):
     def getTasks(self, request, *args, **kwargs):
         listId = kwargs["pk"]
         qs = Task.objects.filter(Q(list=listId))
-        responseData = {"error": "None", "tasks": [dict(id=record.id, name=record.name) for record in qs]}
+        error = "None"
+        if not qs:
+            error = "List does not exist"
+
+        responseData = {"error": error, "tasks": [dict(id=record.id, name=record.name,
+                                                       description=record.description,
+                                                       assigne=record.assignee.id if record.assignee else -1,
+                                                       list=record.list.id if record.list else -1, status=record.status)
+                                                  for record in qs]}
         return Response(data=responseData, status=status.HTTP_200_OK)
 
 

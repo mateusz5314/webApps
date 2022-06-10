@@ -49,9 +49,10 @@ class UserViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['GET'])
     def loginStatus(self, request, *args, **kwargs):
         authStatus = request.user.is_authenticated
-        responseData = {"error": "None", "status": "Logged out"}
+        responseData = {"error": "None", "status": "Logged out", "uid": -1}
         if authStatus:
             responseData["status"] = f"Active account: {request.user}"
+            responseData["uid"] = request.user.id
         else:
             responseData["status"] = f"Active account: None"
 
